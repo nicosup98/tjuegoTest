@@ -1,14 +1,10 @@
+local Assets = require("Assets")
 Player ={
     vida=100,
     damage=1,
     dmgMult=1,
     asset={
-        totalOfFrame=4,
-        assetURL='assets/Owlet_Monster/Owlet_Monster_Idle_4.png',
-        currentF= 1,
-        fWidth = 32,
-        fHeigth=32,
-        idleAnimation={}
+        idle={}
     }
 }
 function Player:new(o,vida,damage,dmgMult,asset)
@@ -19,32 +15,25 @@ function Player:new(o,vida,damage,dmgMult,asset)
     self.vida = vida or 100
     self.dmgMult = dmgMult or 1
     self.asset = asset or {
-        totalOfFrame=4,
-        assetURL='assets/Owlet_Monster/Owlet_Monster_Idle_4.png',
-        currentF=1,
-        fWidth = 32,
-        fHeigth=32,
-        idleAnimation={}
-    }
+            idle=Assets:new(nil,4,'assets/Owlet_Monster/Owlet_Monster_Idle_4.png')
+        }
     return o
 end
 
-function Player:loadAsset(url)
-    local owletIdle = love.graphics.newImage(url or self.asset.assetURL)
-    for idle = 1,self.asset.totalOfFrame do
-        self.asset.idleAnimation[idle] = love.graphics.newQuad((idle -1)*self.asset.fWidth,0,self.asset.fWidth,self.asset.fHeigth,owletIdle:getDimensions() )
-    end
-    return owletIdle
-end
+-- function Player:loadAssets()
+--     for idle = 1,self.asset.idle.totalOfFrame do
+--         self.asset.idle.animation[idle] = love.graphics.newQuad((idle -1)*self.asset.idle.fWidth,0,self.asset.idle.fWidth,self.asset.idle.fHeigth,self.asset.idle.assetImg:getDimensions() )
+--     end
+-- end
 
-function Player:idle(dt,t,delayFrameChange)
-    t = t +dt
+-- function Player:idleAnimation(dt,t,delayFrameChange)
+--     t = t +dt
 
-    if t > delayFrameChange then
-        t = t - delayFrameChange
-        self.asset.currentF = self.asset.currentF % self.asset.totalOfFrame +1
-    end
-    return t
-end
+--     if t > delayFrameChange then
+--         t = t - delayFrameChange
+--         self.asset.idle.currentF = self.asset.idle.currentF % self.asset.idle.totalOfFrame +1
+--     end
+--     return t
+-- end
 
 return Player
