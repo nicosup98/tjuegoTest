@@ -7,7 +7,9 @@ local Player ={
     asset={
         idle={},
         run={},
-        currentAnimationStatus=''
+        currentAnimationStatus='',
+        runQuad = {},
+        idleQuad= {}
     }
 }
 function Player:new(o,vida,damage,dmgMult,asset)
@@ -21,20 +23,32 @@ function Player:new(o,vida,damage,dmgMult,asset)
             idle=Assets:new(nil,4),
             run=Assets:new(nil,6),
             currentAnimationStatus = animationEnum.idle,
+            runQuad = {},
+            idleQuad= {}
         }
     return o
 end
 function Player:drawAnimation()
     local animation
     if self.asset.currentAnimationStatus == animationEnum.run then
-        animation= self.asset.run:getAnimation()
+        animation= self.asset.run:getAnimation(self.asset.runQuad)
         love.graphics.print('run')
     else
         love.graphics.print('idle')
 
-        animation= self.asset.idle:getAnimation()
+        animation= self.asset.idle:getAnimation(self.asset.idleQuad)
     end
     love.graphics.draw(animation[1],animation[2],128,128)
+end
+
+function Player:doRunAnimation(input,dt)
+    if input then
+        self.asset.run:Animation(dt,6)
+        self.asset.currentAnimationStatus = animationEnum.run
+    else
+        self.asset.idle:Animation(dt,4)
+        self.asset.currentAnimationStatus = animationEnum.idle
+    end
 end
 -- function Player:loadAssets()
 --     for idle = 1,self.asset.idle.totalOfFrame do

@@ -1,21 +1,25 @@
 local Player = require('Player')
 local p1 = Player:new(nil,1000,10,1)
-local animationEnum = require('AnimationEnum')
 function love.load()
     local idle = love.graphics.newImage('assets/Owlet_Monster/Owlet_Monster_Idle_4.png')
     local run = love.graphics.newImage('assets/Owlet_Monster/Owlet_Monster_Run_6.png')
-    p1.asset.idle:loadAssets(idle)
-    p1.asset.run:loadAssets(run)
+    local idleQuad =p1.asset.idle:loadAssets(idle,4)
+    local runQuad =p1.asset.run:loadAssets(run,6)
+    local allIdleQuad = {}
+    local allRunQuad = {}
+    for k,q in pairs(idleQuad) do
+        allIdleQuad[k]=love.graphics.newQuad(q[1],q[2],q[3],q[4],idle:getDimensions())
+    end
+    for k,q in pairs(runQuad) do
+        allRunQuad[k]= love.graphics.newQuad(q[1],q[2],q[3],q[4],run:getDimensions())
+    end
+
+    p1.asset.idleQuad = allIdleQuad
+    p1.asset.runQuad = allRunQuad
 end
 
 function love.update(dt)
-    if love.keyboard.isDown('up') then
-        p1.asset.run:Animation(dt)
-        p1.asset.currentAnimationStatus = animationEnum.run
-    else
-        p1.asset.idle:Animation(dt)
-        p1.asset.currentAnimationStatus = animationEnum.idle
-    end
+    p1:doRunAnimation(love.keyboard.isDown('up'),dt)
 end
 
 function love.draw()

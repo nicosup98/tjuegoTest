@@ -20,28 +20,29 @@ function Assets:new(o,totalOfFrame,fWidth,fHeigth)
     self.fWidth =  fWidth or 32
     self.animation = {}
     self.t =0
-    self.delayFrameChange = 0.5
+    self.delayFrameChange = 0.1
     return o
 end
 
-function Assets:loadAssets(asset)
-    self.assetImg={}
+function Assets:loadAssets(asset,totalOfFrame)
+    -- self.assetImg={}
     self.assetImg = asset
-    for idle = 1,self.totalOfFrame do
-        self.animation[idle] = love.graphics.newQuad((idle -1)*self.fWidth,0,self.fWidth,self.fHeigth,self.assetImg:getDimensions() )
+    local animation = {}
+    for idle = 1,totalOfFrame do
+        animation[idle] = {(idle -1)*self.fWidth,0,self.fWidth,self.fHeigth,self.assetImg:getDimensions() }
     end
+    return animation
 end
 
-function Assets:Animation(dt)
+function Assets:Animation(dt,totalOfFrame)
     self.t = self.t +dt
-
     if self.t > self.delayFrameChange then
         self.t = self.t - self.delayFrameChange
-        self.currentF = self.currentF % self.totalOfFrame +1
+        self.currentF = self.currentF % totalOfFrame +1
     end
 end
-function Assets:getAnimation()
+function Assets:getAnimation(allQuads)
     love.graphics.print(self.currentF,0,100)
-    return  {self.assetImg,self.animation[self.currentF]}
+    return  {self.assetImg,allQuads[self.currentF]}
 end
 return Assets
