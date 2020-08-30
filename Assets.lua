@@ -1,19 +1,9 @@
-local Assets = {
-    totalOfFrame=1,
-    assetImg={},
-    currentF= 1,
-    fWidth = 32,
-    fHeigth=32,
-    animation={},
-    t =0,
-    delayFrameChange = 0.1
-}
+local Assets = {}
 
-function Assets:new(o,totalOfFrame,fWidth,fHeigth)
+function Assets:new(o,fWidth,fHeigth)
     o = o or {}
     setmetatable(o,self)
     self.__index = self
-    self.totalOfFrame = totalOfFrame or 4
     self.assetImg = {}
     self.currentF =  1
     self.fHeigth = fHeigth or 32
@@ -29,7 +19,7 @@ function Assets:loadAssets(asset,totalOfFrame)
     self.assetImg = asset
     local animation = {}
     for idle = 1,totalOfFrame do
-        animation[idle] = {(idle -1)*self.fWidth,0,self.fWidth,self.fHeigth,self.assetImg:getDimensions() }
+        animation[idle] = {(idle -1)*self.fWidth,0,self.fWidth,self.fHeigth}
     end
     return animation
 end

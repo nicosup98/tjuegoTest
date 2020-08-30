@@ -19,7 +19,7 @@ function love.load()
 end
 
 function love.update(dt)
-    p1:doRunAnimation(love.keyboard.isDown('up'),dt)
+    p1:doRunAnimation(love.keyboard.isDown('right'),dt)
 end
 
 function love.draw()

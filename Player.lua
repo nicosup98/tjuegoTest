@@ -1,17 +1,6 @@
 local Assets = require("Assets")
 local animationEnum = require('AnimationEnum')
-local Player ={
-    vida=100,
-    damage=1,
-    dmgMult=1,
-    asset={
-        idle={},
-        run={},
-        currentAnimationStatus='',
-        runQuad = {},
-        idleQuad= {}
-    }
-}
+local Player ={}
 function Player:new(o,vida,damage,dmgMult,asset)
     o = o or {}
     setmetatable(o,self)
@@ -20,8 +9,8 @@ function Player:new(o,vida,damage,dmgMult,asset)
     self.vida = vida or 100
     self.dmgMult = dmgMult or 1
     self.asset = asset or {
-            idle=Assets:new(nil,4),
-            run=Assets:new(nil,6),
+            idle=Assets:new(nil),
+            run=Assets:new(nil),
             currentAnimationStatus = animationEnum.idle,
             runQuad = {},
             idleQuad= {}
