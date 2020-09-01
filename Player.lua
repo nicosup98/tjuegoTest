@@ -1,58 +1,63 @@
-local Assets = require("Assets")
-local animationEnum = require('AnimationEnum')
-local Player ={}
-function Player:new(o,vida,damage,dmgMult,asset)
-    o = o or {}
-    setmetatable(o,self)
-    self.__index = self
-    self.damage = damage or 1
-    self.vida = vida or 100
-    self.dmgMult = dmgMult or 1
-    self.asset = asset or {
-            idle=Assets:new(nil),
-            run=Assets:new(nil),
-            currentAnimationStatus = animationEnum.idle,
-            runQuad = {},
-            idleQuad= {}
+local ClassCreate = require('ClassCreate')
+local Player = ClassCreate:derive('Player')
+local Assets = require('Assets')
+--[[
+       player={
+            asset = {
+                    assetName={
+                        url = string
+                        width= number
+                        heigth = number
+                    },
+                        ...
+            },
+        ...
         }
-    return o
+    ]]
+function Player:new(player)
+    self.players = {}
+   for k, v in pairs(player) do
+        self.players[k] = {}
+        print(k)
+        for k2 in pairs(v) do
+            print(k2,v.asset.idle.url)
+            self.players[k].asset={}
+            for k3, v3 in pairs(v.asset) do
+                print(k3,v3.width)
+            self.players[k].asset[k3]= Assets(v3)
+            end
+        end
+        -- self.players[k]
+   end
+   for key in pairs(self.players.j1.asset) do
+       print(key)
+   end
 end
-function Player:drawAnimation()
-    local animation
-    if self.asset.currentAnimationStatus == animationEnum.run then
-        animation= self.asset.run:getAnimation(self.asset.runQuad)
-        love.graphics.print('run')
+
+function Player:update(dt)
+    -- for _, value in pairs(self.players) do
+    --     for _, value2 in pairs(value.asset) do
+    --         value2.assetCharged:animate(dt)
+    --     end
+    -- end
+    if love.keyboard.isDown('right') then
+        self.players.j1.asset.run.assetCharged:animate(dt)
     else
-        love.graphics.print('idle')
-
-        animation= self.asset.idle:getAnimation(self.asset.idleQuad)
+        self.players.j1.asset.idle.assetCharged:animate(dt)
     end
-    love.graphics.draw(animation[1],animation[2],128,128)
 end
 
-function Player:doRunAnimation(input,dt)
-    if input then
-        self.asset.run:Animation(dt,6)
-        self.asset.currentAnimationStatus = animationEnum.run
+function Player:draw()
+    -- for _, value in pairs(self.players) do
+    --     for _, value2 in pairs(value.asset) do
+    --         value2:draw()
+    --     end
+    -- end
+    if love.keyboard.isDown('right') then
+        self.players.j1.asset.run:draw()
     else
-        self.asset.idle:Animation(dt,4)
-        self.asset.currentAnimationStatus = animationEnum.idle
+        self.players.j1.asset.idle:draw()
     end
 end
--- function Player:loadAssets()
---     for idle = 1,self.asset.idle.totalOfFrame do
---         self.asset.idle.animation[idle] = love.graphics.newQuad((idle -1)*self.asset.idle.fWidth,0,self.asset.idle.fWidth,self.asset.idle.fHeigth,self.asset.idle.assetImg:getDimensions() )
---     end
--- end
-
--- function Player:idleAnimation(dt,t,delayFrameChange)
---     t = t +dt
-
---     if t > delayFrameChange then
---         t = t - delayFrameChange
---         self.asset.idle.currentF = self.asset.idle.currentF % self.asset.idle.totalOfFrame +1
---     end
---     return t
--- end
 
 return Player

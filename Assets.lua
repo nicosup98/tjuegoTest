@@ -1,38 +1,21 @@
-local Assets = {}
+local ClassCreate = require('ClassCreate')
+local Assets = ClassCreate:derive('Assets')
+local AnimationEnum = require('AnimationEnum')
+local Animation = require('Animation')
 
-function Assets:new(o,fWidth,fHeigth)
-    o = o or {}
-    setmetatable(o,self)
-    self.__index = self
-    self.assetImg = {}
-    self.currentF =  1
-    self.fHeigth = fHeigth or 32
-    self.fWidth =  fWidth or 32
-    self.animation = {}
-    self.t =0
-    self.delayFrameChange = 0.1
-    return o
-end
-
-function Assets:loadAssets(asset,totalOfFrame)
-    -- self.assetImg={}
-    self.assetImg = asset
-    local animation = {}
-    for idle = 1,totalOfFrame do
-        animation[idle] = {(idle -1)*self.fWidth,0,self.fWidth,self.fHeigth}
-    end
-    return animation
+function Assets:new(assets)
+    self.currentFrame = AnimationEnum.idle
+    self.assetCharged = {}
+    self.asset = {
+        img=love.graphics.newImage(assets.url),
+        posX=assets.posX,
+        posY=assets.posY
+    }
+    self.assetCharged =Animation(self.asset.img,assets.totalFrames,assets.width,assets.heigth)
 end
 
-function Assets:Animation(dt,totalOfFrame)
-    self.t = self.t +dt
-    if self.t > self.delayFrameChange then
-        self.t = self.t - self.delayFrameChange
-        self.currentF = self.currentF % totalOfFrame +1
-    end
+function Assets:draw()
+    love.graphics.draw(self.asset.img,self.assetCharged:getQuadsForDraw(),self.asset.posX,self.asset.posY)
 end
-function Assets:getAnimation(allQuads)
-    love.graphics.print(self.currentF,0,100)
-    return  {self.assetImg,allQuads[self.currentF]}
-end
+
 return Assets
