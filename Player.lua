@@ -27,19 +27,11 @@ function Player:new(player)
             self.players[k].asset[k3]= Assets(v3)
             end
         end
-        -- self.players[k]
-   end
-   for key in pairs(self.players.j1.asset) do
-       print(key)
    end
 end
 
 function Player:update(dt)
-    -- for _, value in pairs(self.players) do
-    --     for _, value2 in pairs(value.asset) do
-    --         value2.assetCharged:animate(dt)
-    --     end
-    -- end
+    
     if love.keyboard.isDown('right') then
         self.players.j1.asset.run.assetCharged:animate(dt)
     else
