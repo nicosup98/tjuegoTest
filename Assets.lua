@@ -14,7 +14,7 @@ function Assets:new(assets)
     self.assetCharged =Animation(self.asset.img,assets.totalFrames,assets.width,assets.heigth)
 end
 
-function Assets:draw()
+function Assets:draw(invert)
     love.graphics.draw(self.asset.img,self.assetCharged:getQuadsForDraw(),self.asset.posX,self.asset.posY)
 end
 

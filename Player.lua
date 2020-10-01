@@ -17,11 +17,12 @@ local Assets = require('Assets')
 function Player:new(player)
     self.players = {}
    for k, v in pairs(player) do
-        self.players[k] = {}
+        self.players[k] = {
+            asset={}
+        }
         print(k)
         for k2 in pairs(v) do
             print(k2,v.asset.idle.url)
-            self.players[k].asset={}
             for k3, v3 in pairs(v.asset) do
                 print(k3,v3.width)
             self.players[k].asset[k3]= Assets(v3)
@@ -31,8 +32,19 @@ function Player:new(player)
 end
 
 function Player:update(dt)
-    
-    if love.keyboard.isDown('right') then
+    if love.keyboard.isDown('right') and love.keyboard.isDown('z') then
+        self.players.j1.asset.golpeRun.assetCharged:animate(dt) 
+
+
+    elseif love.keyboard.isDown('z') then
+
+        self.players.j1.asset.golpeA.assetCharged:animate(dt)
+
+    elseif love.keyboard.isDown('x') then
+
+        self.players.j1.asset.golpeB.assetCharged:animate(dt)
+
+    elseif love.keyboard.isDown('right') or love.keyboard.isDown('left') then
         self.players.j1.asset.run.assetCharged:animate(dt)
     else
         self.players.j1.asset.idle.assetCharged:animate(dt)
@@ -40,12 +52,19 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    -- for _, value in pairs(self.players) do
-    --     for _, value2 in pairs(value.asset) do
-    --         value2:draw()
-    --     end
-    -- end
-    if love.keyboard.isDown('right') then
+    if love.keyboard.isDown('right') and love.keyboard.isDown('z') then
+        self.players.j1.asset.golpeRun:draw()
+
+    elseif love.keyboard.isDown('left') then
+        self.players.j1.asset.run:draw(false)
+
+    elseif love.keyboard.isDown('z') then
+        self.players.j1.asset.golpeA:draw()
+
+    elseif love.keyboard.isDown('x') then
+        self.players.j1.asset.golpeB:draw()
+
+    elseif love.keyboard.isDown('right') then
         self.players.j1.asset.run:draw()
     else
         self.players.j1.asset.idle:draw()
